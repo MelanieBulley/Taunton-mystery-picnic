@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,16 +7,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root {
-      --bg: #0f172a;
+      --bg: #020617;
       --bg-soft: #020617;
       --card: #020617;
       --accent: #f97316;
-      --accent-soft: rgba(249, 115, 22, 0.15);
+      --accent-soft: rgba(249, 115, 22, 0.12);
+      --accent-strong: rgba(249,115,22,0.35);
       --text: #e5e7eb;
       --muted: #9ca3af;
       --border: #1f2937;
-      --shadow-soft: 0 20px 40px rgba(0,0,0,0.5);
+      --shadow-soft: 0 22px 45px rgba(0,0,0,0.7);
       --radius-xl: 18px;
+      --error: #f97373;
+      --success: #4ade80;
     }
 
     * {
@@ -37,10 +41,11 @@
       position: sticky;
       top: 0;
       z-index: 20;
-      backdrop-filter: blur(16px);
-      background: linear-gradient(to bottom,
-        rgba(15,23,42,0.95),
-        rgba(15,23,42,0.75),
+      backdrop-filter: blur(18px);
+      background: linear-gradient(
+        to bottom,
+        rgba(15,23,42,0.96),
+        rgba(15,23,42,0.8),
         transparent
       );
     }
@@ -55,7 +60,7 @@
 
     header h1 {
       margin: 0;
-      font-size: clamp(1.4rem, 3vw, 1.9rem);
+      font-size: clamp(1.35rem, 3vw, 1.9rem);
       letter-spacing: 0.04em;
     }
 
@@ -79,7 +84,7 @@
       letter-spacing: 0.09em;
       padding: 0.25rem 0.7rem;
       border-radius: 999px;
-      border: 1px solid rgba(249, 115, 22, 0.4);
+      border: 1px solid rgba(249,115,22,0.4);
       background: rgba(15,23,42,0.9);
       color: var(--muted);
     }
@@ -92,169 +97,192 @@
       box-shadow: 0 0 8px rgba(249,115,22,0.75);
     }
 
-    .intro-card {
+    .card {
       margin-top: 1.5rem;
-      padding: 1.5rem;
+      padding: 1.6rem 1.6rem 1.8rem;
       border-radius: var(--radius-xl);
       background: radial-gradient(circle at top left,
         rgba(249,115,22,0.18),
-        transparent 55%
+        transparent 60%
       ), radial-gradient(circle at bottom right,
-        rgba(56,189,248,0.12),
-        transparent 55%
+        rgba(56,189,248,0.14),
+        transparent 60%
       ), var(--card);
-      border: 1px solid rgba(148,163,184,0.25);
+      border: 1px solid rgba(148,163,184,0.32);
       box-shadow: var(--shadow-soft);
     }
 
-    .intro-card h2 {
-      margin-top: 0.25rem;
-      margin-bottom: 0.4rem;
-      font-size: 1.2rem;
+    .intro-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.7fr) minmax(0, 1.3fr);
+      gap: 1.2rem;
     }
 
-    .intro-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 2fr) minmax(0, 1.4fr);
-      gap: 1.2rem;
-      margin-top: 1rem;
-      font-size: 0.95rem;
+    .card h2 {
+      margin-top: 0;
+      margin-bottom: 0.4rem;
+      font-size: 1.25rem;
     }
 
     .bubble {
-      padding: 0.85rem 1rem;
+      padding: 0.9rem 1rem;
       border-radius: 16px;
-      background: rgba(15,23,42,0.95);
-      border: 1px solid rgba(148,163,184,0.35);
-      font-size: 0.9rem;
+      background: rgba(15,23,42,0.98);
+      border: 1px solid rgba(148,163,184,0.45);
+      font-size: 0.92rem;
       color: var(--muted);
+      margin-top: 0.45rem;
     }
 
     .bubble strong {
       color: var(--text);
     }
 
-    .stops-nav {
+    .funfacts {
+      font-size: 0.92rem;
+      color: var(--muted);
+      padding-left: 1rem;
+    }
+
+    .funfacts li {
+      margin-bottom: 0.35rem;
+    }
+
+    .btn-row {
+      margin-top: 1.3rem;
       display: flex;
       flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    button {
+      border-radius: 999px;
+      border: 1px solid transparent;
+      padding: 0.6rem 1.3rem;
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
       gap: 0.4rem;
-      margin: 1.5rem 0 0.75rem;
+      transition: transform 0.08s ease-out, box-shadow 0.08s ease-out,
+        background 0.1s ease-out, border 0.1s ease-out;
+      background: var(--accent);
+      color: #111827;
+      box-shadow: 0 14px 28px rgba(249,115,22,0.35);
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 18px 38px rgba(249,115,22,0.45);
+    }
+
+    button.secondary {
+      background: transparent;
+      color: var(--muted);
+      border-color: rgba(148,163,184,0.65);
+      box-shadow: none;
+    }
+
+    button.secondary:hover {
+      border-color: rgba(249,115,22,0.8);
+      color: var(--accent);
+    }
+
+    button.small {
+      padding: 0.45rem 1rem;
       font-size: 0.85rem;
     }
 
-    .stops-nav a {
-      text-decoration: none;
-      color: var(--muted);
-      padding: 0.25rem 0.7rem;
-      border-radius: 999px;
-      border: 1px solid rgba(148,163,184,0.4);
-      background: rgba(15,23,42,0.85);
+    .hidden {
+      display: none !important;
     }
 
-    .stops-nav a:hover {
-      color: var(--accent);
-      border-color: rgba(249,115,22,0.7);
-    }
-
-    section.stop {
-      margin-top: 2rem;
-      padding: 1.4rem 1.3rem 1.5rem;
-      border-radius: var(--radius-xl);
-      background: rgba(15,23,42,0.95);
-      border: 1px solid rgba(30,64,175,0.5);
-      box-shadow: 0 18px 40px rgba(15,23,42,0.85);
-      position: relative;
-    }
-
-    section.stop::before {
-      content: attr(data-label);
-      position: absolute;
-      top: -0.65rem;
-      left: 1.2rem;
-      padding: 0.1rem 0.7rem;
-      border-radius: 999px;
-      font-size: 0.7rem;
+    .stage-label {
+      font-size: 0.8rem;
       text-transform: uppercase;
-      letter-spacing: 0.12em;
-      background: var(--accent-soft);
-      color: var(--accent);
-      border: 1px solid rgba(249,115,22,0.7);
+      letter-spacing: 0.16em;
+      color: var(--muted);
+      margin-bottom: 0.25rem;
     }
 
-    .stop-header {
+    .stop-title {
       display: flex;
       justify-content: space-between;
       flex-wrap: wrap;
-      gap: 0.5rem;
+      gap: 0.6rem;
       align-items: baseline;
     }
 
-    .stop-header h2 {
+    .stop-title h2 {
       margin: 0;
-      font-size: 1.05rem;
+      font-size: 1.1rem;
     }
 
     .stop-meta {
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       color: var(--muted);
       text-align: right;
     }
 
-    .chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.3rem;
-      margin-top: 0.3rem;
-    }
-
-    .chip {
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      padding: 0.15rem 0.6rem;
+    .stop-meta span.tag {
+      display: inline-block;
+      padding: 0.1rem 0.6rem;
       border-radius: 999px;
-      border: 1px solid rgba(148,163,184,0.5);
-      color: var(--muted);
-    }
-
-    .chip.highlight {
-      border-color: rgba(249,115,22,0.8);
-      color: var(--accent);
-      background: rgba(15,23,42,0.9);
-    }
-
-    .stop-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1.9fr) minmax(0, 1.4fr);
-      gap: 1.1rem;
-      margin-top: 0.9rem;
-      font-size: 0.93rem;
-    }
-
-    .stop-block h3 {
-      margin-top: 0.1rem;
-      margin-bottom: 0.3rem;
-      font-size: 0.92rem;
+      border: 1px solid rgba(148,163,184,0.45);
+      margin-left: 0.25rem;
       text-transform: uppercase;
       letter-spacing: 0.12em;
-      color: var(--muted);
+      font-size: 0.7rem;
     }
 
-    .hint-box, .history-box, .explain-box {
-      padding: 0.7rem 0.9rem;
+    .stop-meta span.tag.highlight {
+      border-color: var(--accent-strong);
+      color: var(--accent);
+    }
+
+    .grid-two {
+      display: grid;
+      grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.5fr);
+      gap: 1.2rem;
+      margin-top: 1rem;
+      font-size: 0.94rem;
+    }
+
+    .panel {
+      padding: 0.9rem 1rem;
       border-radius: 14px;
-      background: rgba(15,23,42,0.95);
-      border: 1px solid rgba(75,85,99,0.6);
-      margin-top: 0.4rem;
-      font-size: 0.88rem;
+      background: rgba(15,23,42,0.96);
+      border: 1px solid rgba(55,65,81,0.85);
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .panel h3 {
+      margin-top: 0;
+      margin-bottom: 0.35rem;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
       color: var(--muted);
     }
 
-    .history-box {
-      border-color: rgba(56,189,248,0.6);
+    .panel.history {
+      border-color: rgba(56,189,248,0.65);
     }
 
-    .explain-box {
+    .panel.directions {
       border-color: rgba(132,204,22,0.7);
+    }
+
+    .panel.hint {
+      border-color: rgba(249,115,22,0.7);
+      background: rgba(15,23,42,0.98);
+    }
+
+    .panel.result {
+      border-color: rgba(96,165,250,0.7);
     }
 
     code {
@@ -268,39 +296,71 @@
       color: #e5e7eb;
     }
 
-    .coords {
-      font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco,
-        Consolas, "Liberation Mono", "Courier New", monospace;
-      font-size: 0.85rem;
+    .input-row {
+      margin-top: 0.9rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      align-items: center;
+    }
+
+    input[type="text"] {
+      flex: 1 1 180px;
+      min-width: 0;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.6);
+      padding: 0.55rem 0.9rem;
+      background: rgba(15,23,42,0.9);
+      color: var(--text);
+      font-size: 0.95rem;
+      outline: none;
+    }
+
+    input[type="text"]:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px rgba(249,115,22,0.55);
+    }
+
+    .small-text {
+      font-size: 0.8rem;
       color: var(--muted);
+      margin-top: 0.4rem;
     }
 
-    .next-link {
-      margin-top: 0.8rem;
+    .status {
+      margin-top: 0.5rem;
       font-size: 0.85rem;
     }
 
-    .next-link a {
-      color: var(--accent);
-      text-decoration: none;
+    .status.ok {
+      color: var(--success);
     }
 
-    .next-link a:hover {
-      text-decoration: underline;
+    .status.err {
+      color: var(--error);
+    }
+
+    .final-message {
+      text-align: center;
+    }
+
+    .final-message h2 {
+      margin-top: 0;
+      font-size: 1.35rem;
     }
 
     footer {
       margin-top: 2.5rem;
-      padding-top: 1.5rem;
+      padding-top: 1.4rem;
       border-top: 1px solid var(--border);
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       color: var(--muted);
       text-align: center;
     }
 
     @media (max-width: 800px) {
-      .intro-grid,
-      .stop-grid {
+      .intro-layout,
+      .grid-two {
         grid-template-columns: minmax(0, 1fr);
       }
       .stop-meta {
@@ -314,578 +374,652 @@
     <div class="title">
       <div>
         <div class="pill"><span></span> Taunton · Mystery Picnic Walk</div>
-        <h1>Taunton Mystery Picnic · 1 Mile Walking Tour</h1>
+        <h1>Taunton Mystery Picnic · 1-Mile Puzzle Walk</h1>
       </div>
       <div class="tagline">
-        Scan a QR · Solve a Clue · Walk · Learn · Eat · Picnic in Vivary Park
+        Start at the castle · Solve puzzles · Unlock history · Picnic in Vivary Park
       </div>
     </div>
   </header>
 
   <main>
-    <div class="intro-card" id="intro">
-      <h2>Welcome, Investigator.</h2>
+    <!-- INTRO SCREEN -->
+    <section id="intro-screen" class="card">
+      <div class="stage-label">Welcome</div>
+      <h2>Welcome to your Taunton Mystery Picnic</h2>
       <p>
-        This is a self-guided, roughly <strong>1-mile</strong> mystery walk
-        around Taunton town centre. At each stop you’ll:
+        This is a self-guided, roughly <strong>1-mile</strong> walking tour around
+        Taunton town centre. You’ll solve puzzles, unlock snippets of history, and
+        collect ideas for a perfect picnic in <strong>Vivary Park</strong>.
       </p>
-      <ul>
-        <li>Scan a QR code (or use the navigation buttons).</li>
-        <li>Solve a <strong>puzzle or cipher</strong> to confirm the location.</li>
-        <li>Read a short <strong>history snippet</strong> as if on an audio tour.</li>
-        <li>Optionally collect a <strong>picnic item</strong> from an independent shop.</li>
-      </ul>
 
-      <div class="intro-grid">
+      <div class="intro-layout">
         <div>
-          <h3>How to use this page</h3>
+          <h3>Taunton in a Nutshell</h3>
           <div class="bubble">
-            <strong>1.</strong> Start at <strong>Stop 1 – Castle Green</strong>.<br />
-            <strong>2.</strong> At each stop, scan its QR code to jump straight to that
-            section (for example <code>#stop2</code>, <code>#stop3</code>, etc.).<br />
-            <strong>3.</strong> Follow the walking directions to the next stop. The whole
-            loop stays in the city centre and ends in Vivary Park for your picnic.
+            <p>
+              Taunton has grown up around the <strong>River Tone</strong> and a
+              <strong>medieval castle</strong>. It became an important market town
+              for wool, cloth and later dairy, and played a dramatic role in the
+              <strong>Monmouth Rebellion</strong> of 1685 when rebels tried to
+              unseat King James II.
+            </p>
+            <p>
+              Today, Taunton blends historic lanes, independent shops and green
+              spaces right in the centre of town – ideal for a gentle mystery walk.
+            </p>
           </div>
         </div>
         <div>
-          <h3>Route Overview (approx)</h3>
-          <div class="bubble">
-            <strong>Total distance:</strong> ~1 mile / 1.6 km<br />
-            <strong>Stops:</strong> 7 food/interest stops + final picnic<br />
-            <strong>Suggested order:</strong><br />
-            Castle Green → River &amp; St James Street (Augustus &amp; Ganesha) →<br />
-            Town centre (tea/coffee &amp; cheese) → Bath Place → Hammett’s Bakery →
-            Vivary Park.
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <nav class="stops-nav">
-      <a href="#stop1">Stop 1</a>
-      <a href="#stop2">Stop 2</a>
-      <a href="#stop3">Stop 3</a>
-      <a href="#stop4">Stop 4</a>
-      <a href="#stop5">Stop 5</a>
-      <a href="#stop6">Stop 6</a>
-      <a href="#stop7">Stop 7</a>
-      <a href="#final">Picnic</a>
-    </nav>
-
-    <!-- STOP 1 -->
-    <section class="stop" id="stop1" data-label="Start · Stop 1">
-      <div class="stop-header">
-        <h2>Castle Green &amp; Taunton Castle (Taunton Independent Market)</h2>
-        <div class="stop-meta">
-          Walking from here: short strolls only<br />
-          <span class="coords">Approx area: Castle Green, Taunton town centre</span>
-          <div class="chips">
-            <span class="chip highlight">Start</span>
-            <span class="chip">History</span>
-            <span class="chip">Market</span>
-          </div>
+          <h3>Fun Facts</h3>
+          <ul class="funfacts">
+            <li>
+              The name <strong>Taunton</strong> likely comes from
+              “<em>Town on the Tone</em>”, referencing the river that runs through it.
+            </li>
+            <li>
+              The castle site has seen fortifications since at least the
+              <strong>1100s</strong>, and has hosted royal visits, uprisings and
+              court sessions.
+            </li>
+            <li>
+              <strong>Vivary Park</strong> takes its name from a medieval “vivary” –
+              a place where fish were kept to feed local people.
+            </li>
+            <li>
+              Taunton was once famous for its cloth and later cider – and the county
+              of Somerset is still strongly associated with apples and dairy.
+            </li>
+          </ul>
         </div>
       </div>
 
-      <div class="stop-grid">
-        <div class="stop-block">
-          <h3>Puzzle Clue · Caesar Cipher (Shift 3)</h3>
-          <p>
-            Decode this to confirm your starting point. Each letter has been shifted
-            <strong>forward by 3</strong> in the alphabet:
-          </p>
-          <div class="hint-box">
-            <strong>Code:</strong><br />
-            <code>Fdvwoh Judhq Pdunhw</code>
-          </div>
-          <div class="explain-box">
-            <strong>How to solve:</strong><br />
-            This is a classic <strong>Caesar cipher</strong>. To decode, shift each
-            letter <em>back</em> by 3 in the alphabet (D→A, E→B, etc.).<br /><br />
-            <strong>Solution:</strong> CASTLE GREEN MARKET.
-          </div>
-
-          <div class="next-link">
-            <strong>From here:</strong> Stand facing the castle and open green. When
-            you’re ready, head toward the river and the streets leading to
-            <strong>St James Street</strong> – that’s where Stop 2 awaits.
-          </div>
-        </div>
-
-        <div class="stop-block">
-          <h3>History · Taunton Castle &amp; Castle Green</h3>
-          <div class="history-box">
-            <p>
-              Taunton Castle’s origins reach back to the 12th century. Over the
-              centuries it has seen sieges, political drama, and even played a role
-              in the <strong>Monmouth Rebellion</strong> of 1685, when James Scott
-              attempted to overthrow King James II.
-            </p>
-            <p>
-              Castle Green in front of you, once part of the castle precinct, is now
-              a peaceful open space. Today it becomes your “base camp” for this
-              mystery walk, often hosting markets with local food, crafts, and
-              produce – perfect for gathering the first pieces of your picnic.
-            </p>
-          </div>
-          <div class="hint-box">
-            <strong>Picnic idea:</strong> Pick up fresh bread, pastries or local
-            treats from market stalls when they’re running.
-          </div>
-        </div>
+      <div class="btn-row">
+        <button id="start-btn">
+          ▶ Start the mystery walk
+        </button>
+        <button class="secondary small" onclick="document.getElementById('how-it-works').scrollIntoView({behavior:'smooth'})">
+          How it works
+        </button>
       </div>
     </section>
 
-    <!-- STOP 2 -->
-    <section class="stop" id="stop2" data-label="Stop 2">
-      <div class="stop-header">
-        <h2>Augustus Deli · St James Street (Riverside Flavours)</h2>
-        <div class="stop-meta">
-          Walk: Castle Green → river → St James Street (~3–5 min)<br />
-          <span class="coords">Head south-west from Castle Green towards the river, then follow signs for St James Street.</span>
-          <div class="chips">
-            <span class="chip">Deli</span>
-            <span class="chip">Near river Tone</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="stop-grid">
-        <div class="stop-block">
-          <h3>Directional Riddle</h3>
-          <p>
-            Use this riddle to visualise your path and confirm you’re in the right
-            place:
-          </p>
-          <div class="hint-box">
-            <em>
-              “Leave the castle’s gaze and seek the water’s edge.<br />
-              Follow the river as it curves, keeping it close on one side.<br />
-              Where quiet doors hide continental flavours,<br />
-              you’ll find a counter of savoury treasures.”
-            </em>
-          </div>
-          <div class="explain-box">
-            <strong>How to interpret:</strong><br />
+    <section id="how-it-works" class="card">
+      <h2>How it works</h2>
+      <div class="bubble">
+        <ol>
+          <li>
+            You’ll see a <strong>puzzle page</strong> for each stop: a riddle,
+            cipher or word puzzle that hints at the next location.
+          </li>
+          <li>
+            You can tap <strong>“Show hint”</strong> on any page to get guidance on
+            how to approach the puzzle.
+          </li>
+          <li>
+            Type your answer into the box and hit <strong>“Check answer”</strong>.
+            If you’re right, you’ll reveal:
             <ul>
-              <li>From Castle Green, walk down towards the <strong>River Tone</strong>.</li>
-              <li>Follow the riverside path heading toward <strong>St James Street</strong>.</li>
-              <li>Look for <strong>Augustus</strong>, a restaurant/deli near this area.</li>
+              <li>Details of the stop</li>
+              <li>History &amp; fun facts (like an audio tour in text form)</li>
+              <li>Walking directions to that stop</li>
             </ul>
-            When the description matches what you see – you’ve solved it.
+          </li>
+          <li>
+            Stuck? Press <strong>“I give up – show me”</strong> to reveal the answer
+            and still get the history and directions.
+          </li>
+        </ol>
+        <p>
+          The puzzles are designed to be <strong>moderately challenging</strong> but
+          solvable – they often point to a <em>word or idea</em> linked to the next
+          place, not always the exact name.
+        </p>
+      </div>
+    </section>
+
+    <!-- GAME SCREEN -->
+    <section id="game-screen" class="card hidden">
+      <div class="stage-label" id="stage-label">Stop</div>
+      <div class="stop-title">
+        <h2 id="stop-name">Stop name</h2>
+        <div class="stop-meta">
+          <span id="stop-distance"></span><br />
+          <span id="stop-tags"></span>
+        </div>
+      </div>
+
+      <div class="grid-two">
+        <div>
+          <div class="panel">
+            <h3>Puzzle clue</h3>
+            <p id="puzzle-text"></p>
+
+            <div id="puzzle-extra"></div>
+
+            <div class="input-row">
+              <input
+                type="text"
+                id="answer-input"
+                placeholder="Type your answer here..."
+                autocomplete="off"
+              />
+              <button class="small" id="check-answer-btn">Check answer</button>
+            </div>
+            <div class="small-text">
+              Answers are usually a single word or short phrase, not case-sensitive.
+            </div>
+
+            <div class="btn-row" style="margin-top:0.75rem;">
+              <button class="secondary small" id="hint-toggle-btn">
+                💡 Show hint
+              </button>
+              <button class="secondary small" id="give-up-btn">
+                🙈 I give up – show me
+              </button>
+            </div>
+
+            <div id="status-msg" class="status"></div>
           </div>
 
-          <div class="next-link">
-            <strong>From here:</strong> Once you’ve spotted Augustus and (optionally)
-            grabbed a deli treat, continue further into St James Street – your next
-            stop is a few minutes away in the same general area.
+          <div id="hint-panel" class="panel hint hidden">
+            <h3>Hint</h3>
+            <p id="hint-text"></p>
           </div>
         </div>
 
-        <div class="stop-block">
-          <h3>History · St James Street &amp; Trade</h3>
-          <div class="history-box">
-            <p>
-              St James Street grew around a medieval priory and later became a route
-              linking the town to routes heading west and to the river. As Taunton
-              developed, this area blended religious, residential and commercial
-              uses.
-            </p>
-            <p>
-              Today it’s quieter than the main high street but still carries the
-              echo of centuries of trade – a fitting place to sample rich, modern
-              flavours in a historic setting.
-            </p>
-          </div>
-          <div class="hint-box">
-            <strong>Picnic idea:</strong> Pick up olives, cured meats, dips or
-            salads that travel well. These will pair nicely with the bread you may
-            have collected earlier.
+        <div>
+          <div id="result-panel" class="panel result hidden">
+            <h3>Stop details unlocked</h3>
+            <p id="answer-explanation"></p>
+            <div id="history-block" class="panel history" style="margin-top:0.7rem;">
+              <h3>History &amp; fun facts</h3>
+              <div id="history-text"></div>
+            </div>
+            <div id="directions-block" class="panel directions" style="margin-top:0.7rem;">
+              <h3>Walking directions</h3>
+              <div id="directions-text"></div>
+            </div>
+            <div class="panel" style="margin-top:0.7rem;" id="picnic-block">
+              <h3>Picnic idea</h3>
+              <div id="picnic-text"></div>
+            </div>
+
+            <div class="btn-row">
+              <button class="small" id="next-stop-btn">
+                ➜ Go to next puzzle
+              </button>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- STOP 3 -->
-    <section class="stop" id="stop3" data-label="Stop 3">
-      <div class="stop-header">
-        <h2>Artisan Cheese Stop · Town Centre</h2>
-        <div class="stop-meta">
-          Walk: St James Street → towards main shopping streets (~3–5 min)<br />
-          <span class="coords">Head toward the central high street / Fore Street area.</span>
-          <div class="chips">
-            <span class="chip">Cheese</span>
-            <span class="chip">Market heritage</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="stop-grid">
-        <div class="stop-block">
-          <h3>Puzzle · Word Scramble</h3>
-          <p>Unscramble the letters below to reveal what you’re hunting here:</p>
-          <div class="hint-box">
-            <strong>Scramble:</strong> <code>EESHC</code>
-          </div>
-          <div class="explain-box">
-            <strong>How to solve:</strong><br />
-            Rearrange the letters to form a meaningful word linked to food.
-            Answer: <strong>CHEESE</strong>.<br /><br />
-            Use this as confirmation you’re looking for a cheese-selling shop,
-            stall or deli counter in the central shopping area – many markets or
-            delis in Taunton offer local Somerset cheese.
-          </div>
-
-          <div class="next-link">
-            <strong>From here:</strong> After finding your cheese source, move on
-            towards the heart of the town – you’re aiming for central streets near
-            cafes and tea rooms (your next stop is a tea &amp; coffee house).
-          </div>
-        </div>
-
-        <div class="stop-block">
-          <h3>History · Taunton Markets &amp; Dairy</h3>
-          <div class="history-box">
-            <p>
-              Somerset has a long history of <strong>dairy farming</strong>. Markets
-              in Taunton would once have been busy with traders selling butter,
-              milk, and of course cheese – a staple food that kept well before
-              refrigeration.
-            </p>
-            <p>
-              As you choose your picnic cheese, you’re taking part in a pattern of
-              trade that has shaped this region for hundreds of years.
-            </p>
-          </div>
-          <div class="hint-box">
-            <strong>Picnic idea:</strong> Choose a single small wedge of local
-            cheese plus some crackers. You now have bread + deli + cheese.
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- STOP 4 -->
-    <section class="stop" id="stop4" data-label="Stop 4">
-      <div class="stop-header">
-        <h2>Ganesha Wholefoods · St James / Nearby Lanes</h2>
-        <div class="stop-meta">
-          Walk: Central streets → back toward St James area (~3–5 min)<br />
-          <span class="coords">Look for Ganesha in the smaller streets off the main roads.</span>
-          <div class="chips">
-            <span class="chip">Wholefoods</span>
-            <span class="chip">Independent</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="stop-grid">
-        <div class="stop-block">
-          <h3>Puzzle · Atbash Cipher</h3>
+    <!-- FINAL SCREEN -->
+    <section id="final-screen" class="card hidden">
+      <div class="final-message">
+        <div class="stage-label">Finish</div>
+        <h2>You made it to Vivary Park!</h2>
+        <p>
+          Well done – you’ve walked roughly a mile through Taunton’s centre, solved
+          ciphers and riddles, and followed in the footsteps of centuries of local
+          traders, rebels and residents.
+        </p>
+        <div class="bubble">
           <p>
-            The Atbash cipher works by “flipping” the alphabet: A↔Z, B↔Y, C↔X, and
-            so on.
+            <strong>Vivary Park</strong> takes its name from a medieval vivary – a
+            place where fish were kept as a food source. Over time, the area became
+            a public park with lawns, ornamental gardens and water features. It’s
+            now one of the town’s most loved green spaces.
           </p>
-          <div class="hint-box">
-            <strong>Encoded phrase:</strong><br />
-            <code>Tzm hrnvmw dliw</code>
-          </div>
-          <div class="explain-box">
-            <strong>How to solve:</strong><br />
-            Use Atbash: for each letter, swap it with its “mirror” from the end of
-            the alphabet (A↔Z, B↔Y, etc.).<br /><br />
-            <strong>Solution:</strong> <em>Ganesh Whole</em> (a stylised shortening
-            of <strong>Ganesha Wholefoods</strong>). This confirms you’re heading
-            for an independent wholefoods shop.
-          </div>
-
-          <div class="next-link">
-            <strong>From here:</strong> Once you’ve located Ganesha, you’re close
-            enough to move back toward the very central high street area for your
-            tea &amp; coffee stop.
-          </div>
+          <p>
+            Lay out your food – bread, cheese, deli treats, fruit, sweets and
+            pastries – and enjoy the contrast between the calm park and the busy
+            streets you’ve just explored.
+          </p>
         </div>
-
-        <div class="stop-block">
-          <h3>History · Independent Shops &amp; Growth</h3>
-          <div class="history-box">
-            <p>
-              As Taunton expanded in the 18th and 19th centuries, many side streets
-              and lanes filled with small, independent businesses – grocers,
-              apothecaries, cloth merchants and more.
-            </p>
-            <p>
-              Shops like Ganesha continue that tradition: specialist, personal, and
-              often focused on quality goods. They’re the modern descendants of
-              historic market stalls and small family-run stores.
-            </p>
-          </div>
-          <div class="hint-box">
-            <strong>Picnic idea:</strong> Pick up fruit, nuts, or a soft drink here
-            to balance out breads and cheeses.
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- STOP 5 -->
-    <section class="stop" id="stop5" data-label="Stop 5">
-      <div class="stop-header">
-        <h2>Mr. Miles Tea &amp; Coffee House · Near the Centre</h2>
-        <div class="stop-meta">
-          Walk: Ganesha area → central high street (~3–5 min)<br />
-          <span class="coords">Return toward the main streets and look for a tea &amp; coffee house.</span>
-          <div class="chips">
-            <span class="chip">Tea &amp; Coffee</span>
-            <span class="chip">Sweet treats</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="stop-grid">
-        <div class="stop-block">
-          <h3>Puzzle · Hidden Direction in a Phrase</h3>
-          <p>Read this short line carefully:</p>
-          <div class="hint-box">
-            <em>“Follow the scent of roasted tales.”</em>
-          </div>
-          <div class="explain-box">
-            <strong>How to solve:</strong><br />
-            The phrase plays on the similarity of the words:
-            <strong>“tales” → “beans”</strong> and “roasted” strongly suggests
-            <strong>coffee</strong>. Combined, you get:<br />
-            <em>Follow the scent of roasted coffee and stories.</em><br /><br />
-            This hints at a <strong>tea &amp; coffee house</strong> – a place where
-            people sit, drink, and talk.
-          </div>
-
-          <div class="next-link">
-            <strong>From here:</strong> After grabbing a drink or small sweet treat,
-            you’ll head towards one of the most characterful lanes in Taunton:
-            <strong>Bath Place</strong>.
-          </div>
-        </div>
-
-        <div class="stop-block">
-          <h3>History · Tea Rooms in Taunton</h3>
-          <div class="history-box">
-            <p>
-              Tea rooms became popular in Britain in the 19th century, especially
-              from the Victorian era onward. They offered a more respectable space
-              for socialising than pubs, particularly for women.
-            </p>
-            <p>
-              Modern independent tea &amp; coffee houses continue that role:
-              somewhere between home and work where conversations, plans and – in
-              your case – clues can unfold.
-            </p>
-          </div>
-          <div class="hint-box">
-            <strong>Picnic idea:</strong> Buy biscuits, brownies or a slice of cake
-            that travels well, or even some loose-leaf tea to brew later at home.
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- STOP 6 -->
-    <section class="stop" id="stop6" data-label="Stop 6">
-      <div class="stop-header">
-        <h2>Bath Place · Historic Lane of Independent Shops</h2>
-        <div class="stop-meta">
-          Walk: Central high street → Bath Place (~3–5 min)<br />
-          <span class="coords">Look for a narrow, older lane with characterful buildings.</span>
-          <div class="chips">
-            <span class="chip">Historic lane</span>
-            <span class="chip">Chocolates &amp; gifts</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="stop-grid">
-        <div class="stop-block">
-          <h3>Puzzle · Acrostic</h3>
-          <p>Read the first letters of each word in this phrase:</p>
-          <div class="hint-box">
-            <em>“Bricks And Timber Houses”</em>
-          </div>
-          <div class="explain-box">
-            <strong>How to solve:</strong><br />
-            Take the <strong>first letter</strong> of each word:<br />
-            Bricks (<strong>B</strong>) · And (<strong>A</strong>) · Timber (<strong>T</strong>) · Houses (<strong>H</strong>)<br /><br />
-            This spells <strong>BATH</strong> – guiding you to
-            <strong>Bath Place</strong>, a small historic street filled with
-            independent shops.
-          </div>
-
-          <div class="next-link">
-            <strong>From here:</strong> Wander the lane, explore the windows, and
-            when you’re ready, follow signs or maps northwards towards one of the
-            bakeries such as <strong>Hammett’s</strong> for your final food stop.
-          </div>
-        </div>
-
-        <div class="stop-block">
-          <h3>History · Medieval Plots &amp; Narrow Streets</h3>
-          <div class="history-box">
-            <p>
-              Lanes like Bath Place often owe their shape to medieval land plots –
-              long and narrow strips of land running back from the main road.
-              Buildings were squeezed into these shapes, creating the charming,
-              slightly crooked streets you see today.
-            </p>
-            <p>
-              Bath Place is particularly known for its mix of independent boutiques,
-              cafes and specialist shops, making it a little micro-world within
-              Taunton’s centre.
-            </p>
-          </div>
-          <div class="hint-box">
-            <strong>Picnic idea:</strong> Look for chocolates, sweets or a small
-            special treat to finish off your picnic menu.
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- STOP 7 -->
-    <section class="stop" id="stop7" data-label="Stop 7">
-      <div class="stop-header">
-        <h2>Hammett’s Bakery (or nearby artisan bakery)</h2>
-        <div class="stop-meta">
-          Walk: Bath Place area → bakery (~3–5 min)<br />
-          <span class="coords">Head towards nearby streets where bakeries cluster.</span>
-          <div class="chips">
-            <span class="chip">Bakery</span>
-            <span class="chip">Final food stop</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="stop-grid">
-        <div class="stop-block">
-          <h3>Puzzle · Riddle</h3>
-          <div class="hint-box">
-            <em>
-              “Golden at dawn, gone by noon,<br />
-              I live behind glass in a warm little room.<br />
-              Find me where flour meets fire,<br />
-              and your picnic feast climbs higher.”
-            </em>
-          </div>
-          <div class="explain-box">
-            <strong>How to solve:</strong><br />
-            The riddle describes <strong>freshly baked goods</strong> (golden,
-            disappearing quickly, behind glass) and hints at a
-            <strong>bakery</strong>. Use local maps or your eyes to locate
-            <strong>Hammett’s Bakery</strong> or a similar artisan bakery nearby.
-          </div>
-
-          <div class="next-link">
-            <strong>From here:</strong> With your final food item collected, it’s
-            time to walk to your picnic destination: <strong>Vivary Park</strong>.
-            Head generally south from the central area, following signs to the park.
-          </div>
-        </div>
-
-        <div class="stop-block">
-          <h3>History · Bakers of the Town</h3>
-          <div class="history-box">
-            <p>
-              Bakers have been essential to town life for centuries. In many places,
-              bread was once regulated to ensure fair prices and good quality,
-              because it was so central to everyday diets.
-            </p>
-            <p>
-              A modern artisan bakery carries echoes of that history – with skilled
-              bakers, early starts, and fresh loaves appearing before most people
-              are awake.
-            </p>
-          </div>
-          <div class="hint-box">
-            <strong>Picnic idea:</strong> Choose a savoury pastry, pasty or sweet
-            bun as your “grand finale” picnic item.
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- FINAL -->
-    <section class="stop" id="final" data-label="Final · Picnic">
-      <div class="stop-header">
-        <h2>Vivary Park · Picnic &amp; Reflection</h2>
-        <div class="stop-meta">
-          Walk: Central area → Vivary Park (~5–10 min, still within ~1 mile loop)<br />
-          <span class="coords">Look for the main park gates and follow the paths inward.</span>
-          <div class="chips">
-            <span class="chip highlight">Picnic</span>
-            <span class="chip">Green space</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="stop-grid">
-        <div class="stop-block">
-          <h3>Final Clue · Gentle Direction</h3>
-          <div class="hint-box">
-            <em>
-              “To end your trail, walk away from the shops until the noise fades.<br />
-              Seek tall trees and open lawns behind iron gates,<br />
-              where fountains whisper and paths cross like threads.<br />
-              There your feast will finally rest.”
-            </em>
-          </div>
-          <div class="explain-box">
-            <strong>How to interpret:</strong><br />
-            Head from the central shopping streets towards the well-signed
-            <strong>Vivary Park</strong>. Enter through the gates, then walk until
-            you find a comfortable patch of grass with a good view – perhaps near
-            flower beds or water features.
-          </div>
-        </div>
-
-        <div class="stop-block">
-          <h3>History · From Vivary to Park</h3>
-          <div class="history-box">
-            <p>
-              The name “Vivary” comes from the medieval term for a place where fish
-              were kept – a reminder that this land once served as a resource for
-              local people.
-            </p>
-            <p>
-              Over time, it has become one of Taunton’s best-loved public parks:
-              lawns, ornamental gardens, and water features provide a breathing
-              space right beside the busy town centre. It’s a fitting end point for
-              a walk that’s mixed food, history and puzzles.
-            </p>
-          </div>
-          <div class="hint-box">
-            <strong>Picnic moment:</strong> Lay everything out – bread, deli,
-            cheese, fruit, sweets, pastries – and enjoy the view. You’ve walked a
-            mile, solved ciphers, and followed in the footsteps of centuries of
-            Taunton life.
-          </div>
-        </div>
+        <p style="margin-top:1.1rem;font-size:0.9rem;color:var(--muted);">
+          You can replay any stop by refreshing the page and working through the
+          puzzles again, or simply explore Taunton further on your own route.
+        </p>
       </div>
     </section>
 
     <footer>
-      Designed as a playful self-guided tour. Distances and directions are
-      approximate – always use your judgment and stay safe when walking.
+      Distances and directions are approximate – always use your judgment and stay
+      safe when walking. This walk is designed as a playful companion, not a
+      precise navigation tool.
     </footer>
   </main>
 
   <script>
-    // Optional: smooth scrolling for in-page navigation
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener("click", function (e) {
-        const targetId = this.getAttribute("href").slice(1);
-        const target = document.getElementById(targetId);
-        if (!target) return;
-        e.preventDefault();
-        target.scrollIntoView({ behavior: "smooth", block: "start" });
-        history.replaceState(null, "", "#" + targetId);
+    // --- DATA FOR EACH STOP ---------------------------------------------------
+    const stops = [
+      {
+        id: 1,
+        label: "Start · Stop 1",
+        name: "Castle Green & Taunton Castle (Starting Area)",
+        distance: "Castle Green – starting point",
+        tags: ["History", "Castle", "Open space"],
+        puzzleText:
+          "Your journey begins where old stone walls watch over an open square. " +
+          "Decode this Caesar-cipher phrase (shift every letter back by 3):",
+        puzzleExtra:
+          '<p><strong>Code:</strong> <code>Fdvwoh Fdvwoh Fdvwoh</code></p>' +
+          "<p>This repeats the same word three times.</p>",
+        hint:
+          "In a Caesar cipher, each letter is shifted along the alphabet. Here, " +
+          "you need to move each letter <em>back</em> by 3 (D→A, E→B, F→C, etc.). " +
+          "Try decoding just the first word.",
+        acceptedAnswers: ["castle", "the castle"],
+        answerExplanation:
+          "Decoding the phrase by shifting each letter back by 3 gives you " +
+          "<strong>CASTLE CASTLE CASTLE</strong>. That points you to the " +
+          "<strong>castle and Castle Green</strong> – your starting location.",
+        historyHtml:
+          "<p>Taunton Castle has medieval origins and by the 12th century " +
+          "it was already a fortified site. Over its long life it has seen " +
+          "sieges, political intrigue, and the dramatic events of the " +
+          "<strong>Monmouth Rebellion</strong> in 1685, when James Scott " +
+          "attempted to challenge King James II.</p>" +
+          "<p>Castle Green in front of the castle is now a calm public space, " +
+          "but for centuries it would have been surrounded by defensive works, " +
+          "storehouses and people coming and going on official business.</p>",
+        directionsHtml:
+          "<p>Stand on <strong>Castle Green</strong> facing the castle. " +
+          "When you’re ready to begin moving, walk down towards the " +
+          "<strong>River Tone</strong> and look for paths leading along the riverside. " +
+          "You’re heading towards quieter streets near St James Street for your next clue.</p>",
+        picnicHtml:
+          "<p>If there’s a market running on Castle Green, this is an excellent " +
+          "place to pick up your first picnic items: fresh bread, pastries or " +
+          "local snacks.</p>"
+      },
+      {
+        id: 2,
+        label: "Stop 2",
+        name: "Towards Augustus Deli · Riverside Flavours",
+        distance: "Short walk from Castle Green (~3–5 min)",
+        tags: ["Riverside", "Deli"],
+        puzzleText:
+          "From the castle, your path follows the river’s whisper. Solve this riddle " +
+          "to find the <em>type</em> of place you’re seeking:",
+        puzzleExtra:
+          '<p><em>“I hide behind glass in a quiet room.<br>' +
+          "I serve slices and spreads, but I am not a kitchen.<br>" +
+          "I’m cool, I’m savoury, and travellers take me away in little boxes.<br>" +
+          'What am I?”</em></p>',
+        hint:
+          "Think of a counter full of olives, cheeses and sliced meats. It's not a supermarket aisle " +
+          "and not a full restaurant table – more a specialist counter or shop.",
+        acceptedAnswers: ["deli", "delicatessen"],
+        answerExplanation:
+          "The riddle is describing a <strong>deli</strong> (delicatessen) – " +
+          "a place with cool counters of savoury treats ready to take away.",
+        historyHtml:
+          "<p>Streets near the river and St James Street have long been used as " +
+          "routes for trade and travel in and out of Taunton. As the town grew, " +
+          "small specialist food businesses began to cluster along these routes.</p>" +
+          "<p>Modern delis continue that pattern, offering concentrated flavour " +
+          "and a sense of continental food culture in a relatively small space.</p>",
+        directionsHtml:
+          "<p>From <strong>Castle Green</strong>, walk down towards the " +
+          "<strong>River Tone</strong> and follow a path so that the river is on " +
+          "one side of you. Look for streets leading towards " +
+          "<strong>St James Street</strong>. In that general area, you’re looking " +
+          "for a <strong>deli-style restaurant or counter</strong> (for example, Augustus Deli).</p>",
+        picnicHtml:
+          "<p>Pick up something flavourful but portable: olives, a small tub of " +
+          "salad, cured meats or antipasti. These will go well with the bread " +
+          "from earlier stops.</p>"
+      },
+      {
+        id: 3,
+        label: "Stop 3",
+        name: "Cheese Connection · Central Taunton",
+        distance: "St James area → main shopping streets (~3–5 min)",
+        tags: ["Cheese", "Market heritage"],
+        puzzleText:
+          "Taunton’s story is closely tied to dairy. Unscramble this word to reveal " +
+          "a key picnic ingredient and the theme of this stop:",
+        puzzleExtra:
+          '<p><strong>Scramble:</strong> <code>EESHC</code></p>',
+        hint:
+          "Try rearranging the letters into a common food that often comes in wedges " +
+          "and goes well with bread. Start with the idea that it probably begins with CH...",
+        acceptedAnswers: ["cheese"],
+        answerExplanation:
+          "Rearranging <code>EESHC</code> gives you <strong>CHEESE</strong>, " +
+          "which is your clue for this stop.",
+        historyHtml:
+          "<p>Somerset is famous for its dairy farms, and markets in Taunton " +
+          "would once have been busy with traders selling butter and " +
+          "locally produced cheeses. These products were a vital source of " +
+          "calories and could be stored longer than fresh milk.</p>" +
+          "<p>Today, cheese counters, delis and specialist shops around the " +
+          "town centre keep this tradition alive with both local and international varieties.</p>",
+        directionsHtml:
+          "<p>From the St James Street / riverside area, walk towards the " +
+          "<strong>central shopping streets</strong> (for example, Fore Street and " +
+          "the surrounding lanes). Look for a shop or counter selling " +
+          "<strong>cheese</strong> – this might be a specialist cheesemonger, " +
+          "a deli with a cheese section, or a market stall if one is running.</p>",
+        picnicHtml:
+          "<p>Choose a single small wedge of cheese (local if possible) and some " +
+          "crackers. Combined with your bread and deli items, you now have the " +
+          "core of a classic picnic spread.</p>"
+      },
+      {
+        id: 4,
+        label: "Stop 4",
+        name: "Ganesha Wholefoods · Independent Spirit",
+        distance: "Central streets → smaller lanes (~3–5 min)",
+        tags: ["Wholefoods", "Independent shop"],
+        puzzleText:
+          "This clue uses the <strong>Atbash cipher</strong>, which flips the alphabet " +
+          "so A↔Z, B↔Y, C↔X and so on. Decode this phrase:",
+        puzzleExtra:
+          '<p><strong>Code:</strong> <code>Tzm hrnvmw</code></p>' +
+          "<p>It’s a stylised shortened form of the shop’s name.</p>",
+        hint:
+          "Write the alphabet A to Z, then Z to A underneath it. For each letter in " +
+          "<code>TZM HRNVMW</code>, find its ‘mirror’ letter. Focus on the first " +
+          "word – it should turn into a name starting with G.",
+        acceptedAnswers: ["ganesha", "ganesh"],
+        answerExplanation:
+          "Using Atbash (A↔Z, B↔Y, C↔X…), <code>TZM</code> decodes to " +
+          "<strong>GAN</strong>. The phrase is a shortened pointer to " +
+          "<strong>Ganesha</strong>, as in Ganesha Wholefoods.",
+        historyHtml:
+          "<p>As Taunton expanded in the 18th and 19th centuries, many side streets " +
+          "and lanes filled with small, independent businesses. These offered " +
+          "specialist goods – from groceries to textiles and remedies.</p>" +
+          "<p>Modern independent wholefood shops continue that tradition, often " +
+          "focusing on organic foods, ethical products and a more personal level " +
+          "of service than big supermarkets.</p>",
+        directionsHtml:
+          "<p>From the busier main streets, work your way into the " +
+          "<strong>smaller connecting lanes</strong> near the centre and the " +
+          "St James area again. You’re looking for <strong>Ganesha Wholefoods</strong> " +
+          "or a similar wholefoods shop nearby.</p>",
+        picnicHtml:
+          "<p>Pick up fruit, nuts, or a soft drink here. These will add freshness " +
+          "and balance to your picnic – something light alongside the bread, cheese " +
+          "and savoury items you already have.</p>"
+      },
+      {
+        id: 5,
+        label: "Stop 5",
+        name: "Mr. Miles Tea & Coffee House · Stories & Steam",
+        distance: "Wholefoods area → main streets (~3–5 min)",
+        tags: ["Tea & coffee", "Sweet treats"],
+        puzzleText:
+          "Hidden inside this sentence is the key word for your next stop. " +
+          "Read the <strong>first letter of each word</strong>:",
+        puzzleExtra:
+          '<p><em>“<strong>C</strong>ream <strong>O</strong>ften <strong>F</strong>ills ' +
+          '<strong>F</strong>ine <strong>E</strong>arthenware <strong>E</strong>agerly.”</em></p>',
+        hint:
+          "Take just the first letter of each word and write them in a row. " +
+          "Think about a hot drink that appears in mugs and cups in many cafés.",
+        acceptedAnswers: ["coffee"],
+        answerExplanation:
+          "The initial letters spell <strong>COFFEE</strong>: " +
+          "Cream (C), Often (O), Fills (F), Fine (F), Earthenware (E), Eagerly (E). " +
+          "This points you towards a tea & coffee house.",
+        historyHtml:
+          "<p>Tea and coffee houses became popular social spaces in Britain from the " +
+          "17th century onwards, and by the Victorian era they were a key part of " +
+          "urban life – places to meet, talk, read and plan.</p>" +
+          "<p>Independent tea & coffee houses in modern Taunton continue that role. " +
+          "They’re somewhere between home and work where stories and ideas are shared " +
+          "over hot drinks and sweet treats.</p>",
+        directionsHtml:
+          "<p>From the wholefoods area, walk back towards the " +
+          "<strong>central high street</strong>. You’re looking for a " +
+          "<strong>tea & coffee house</strong> such as Mr. Miles, in or near the " +
+          "main shopping streets. Use local signage and your nose – the smell of " +
+          "roasting coffee is often a giveaway.</p>",
+        picnicHtml:
+          "<p>Consider picking up biscuits, a slice of cake or brownies that travel " +
+          "well. You could also buy some loose-leaf tea or ground coffee to enjoy " +
+          "later at home.</p>"
+      },
+      {
+        id: 6,
+        label: "Stop 6",
+        name: "Bath Place · Historic Lanes & Independents",
+        distance: "High street → Bath Place (~3–5 min)",
+        tags: ["Historic lane", "Independent shops"],
+        puzzleText:
+          "This short number sequence hides the name of a historic lane. " +
+          "Each number is a letter’s position in the alphabet (A=1, B=2, etc.):",
+        puzzleExtra:
+          '<p><strong>Code:</strong> <code>2-1-20-8</code></p>',
+        hint:
+          "Convert each number to a letter using A=1, B=2, C=3 and so on. " +
+          "Then read them in order to get the word. Think of a lane name you " +
+          "might have seen on signs nearby.",
+        acceptedAnswers: ["bath"],
+        answerExplanation:
+          "2 = B, 1 = A, 20 = T, 8 = H. The code spells <strong>BATH</strong>, " +
+          "pointing you to <strong>Bath Place</strong>, one of the most charming " +
+          "historic lanes in Taunton.",
+        historyHtml:
+          "<p>Bath Place is a narrow historic lane lined with independent shops. " +
+          "Its shape reflects medieval land plots – long, thin strips of land " +
+          "running back from the main street. Over time, buildings were squeezed " +
+          "into these shapes, creating the slightly crooked, intimate character you " +
+          "see today.</p>" +
+          "<p>The lane has a mix of boutiques, cafés and specialist shops, and " +
+          "gives a sense of how Taunton’s commercial heart developed over centuries.</p>",
+        directionsHtml:
+          "<p>From the main high street area, look for signs or maps pointing to " +
+          "<strong>Bath Place</strong>. It’s a short walk from central shopping streets " +
+          "and is usually recognisable as a narrower, older-looking lane with " +
+          "independent shopfronts.</p>",
+        picnicHtml:
+          "<p>This is a nice place to pick up something a bit indulgent – handmade " +
+          "chocolates, sweets or a small special treat to finish off your picnic menu.</p>"
+      },
+      {
+        id: 7,
+        label: "Stop 7",
+        name: "Artisan Bakery · Final Food Stop",
+        distance: "Bath Place → nearby bakery (~3–5 min)",
+        tags: ["Bakery", "Final food stop"],
+        puzzleText:
+          "Your last food-based puzzle is a riddle pointing to the kind of place " +
+          "you’re seeking:",
+        puzzleExtra:
+          '<p><em>“Golden at dawn, gone by noon,<br>' +
+          "I live behind glass in a warm little room.<br>" +
+          "Flour and fire make me rise,<br>" +
+          "Find my makers and your picnic prize.”</em></p>",
+        hint:
+          "Think about what’s coming out of ovens early in the morning, and " +
+          "what kind of shop sells warm loaves and pastries displayed behind glass.",
+        acceptedAnswers: ["bakery", "baker"],
+        answerExplanation:
+          "The riddle describes a <strong>bakery</strong> – warm, full of fresh " +
+          "bread and pastries that often sell out quickly.",
+        historyHtml:
+          "<p>Bakers have been part of town life for many centuries. In some " +
+          "periods, bread prices were regulated because it was such a vital staple. " +
+          "Artisan bakeries continue that craft tradition, with early-morning starts " +
+          "and loaves appearing before most people are awake.</p>",
+        directionsHtml:
+          "<p>From <strong>Bath Place</strong>, head towards nearby streets where " +
+          "local shops and food businesses cluster. Look for an artisan bakery, " +
+          "such as <strong>Hammett’s Bakery</strong>, with a window full of " +
+          "freshly baked goods.</p>" +
+          "<p>Once you’ve picked up your final picnic item, it’s time to walk to " +
+          "your picnic destination: <strong>Vivary Park</strong>. Head generally " +
+          "south from the central streets, following signs to the park.</p>",
+        picnicHtml:
+          "<p>Choose a savoury pastry, pasty or sweet bun as your ‘grand finale’ " +
+          "picnic item. You now have everything you need for a generous spread in the park.</p>"
+      }
+    ];
+
+    let currentIndex = 0;
+    let hasUnlockedThisStop = false;
+
+    const introScreen = document.getElementById("intro-screen");
+    const gameScreen = document.getElementById("game-screen");
+    const finalScreen = document.getElementById("final-screen");
+
+    const stageLabel = document.getElementById("stage-label");
+    const stopNameEl = document.getElementById("stop-name");
+    const stopDistanceEl = document.getElementById("stop-distance");
+    const stopTagsEl = document.getElementById("stop-tags");
+
+    const puzzleTextEl = document.getElementById("puzzle-text");
+    const puzzleExtraEl = document.getElementById("puzzle-extra");
+    const hintPanel = document.getElementById("hint-panel");
+    const hintTextEl = document.getElementById("hint-text");
+    const statusMsgEl = document.getElementById("status-msg");
+
+    const answerInput = document.getElementById("answer-input");
+    const answerExplanationEl = document.getElementById("answer-explanation");
+    const historyTextEl = document.getElementById("history-text");
+    const directionsTextEl = document.getElementById("directions-text");
+    const picnicTextEl = document.getElementById("picnic-text");
+    const resultPanel = document.getElementById("result-panel");
+
+    const startBtn = document.getElementById("start-btn");
+    const checkAnswerBtn = document.getElementById("check-answer-btn");
+    const hintToggleBtn = document.getElementById("hint-toggle-btn");
+    const giveUpBtn = document.getElementById("give-up-btn");
+    const nextStopBtn = document.getElementById("next-stop-btn");
+
+    function normaliseAnswer(str) {
+      return (str || "")
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9 ]+/g, "")
+        .replace(/\s+/g, " ");
+    }
+
+    function renderStop(index) {
+      const stop = stops[index];
+      hasUnlockedThisStop = false;
+
+      stageLabel.textContent = stop.label;
+      stopNameEl.textContent = stop.name;
+      stopDistanceEl.textContent = stop.distance;
+
+      if (stop.tags && stop.tags.length) {
+        stopTagsEl.innerHTML = stop.tags
+          .map((tag, i) => {
+            const highlight = i === 0 ? "highlight" : "";
+            return `<span class="tag ${highlight}">${tag}</span>`;
+          })
+          .join(" ");
+      } else {
+        stopTagsEl.textContent = "";
+      }
+
+      puzzleTextEl.innerHTML = stop.puzzleText;
+      puzzleExtraEl.innerHTML = stop.puzzleExtra || "";
+      hintTextEl.innerHTML = stop.hint || "";
+      answerExplanationEl.innerHTML = "";
+      historyTextEl.innerHTML = "";
+      directionsTextEl.innerHTML = "";
+      picnicTextEl.innerHTML = "";
+
+      answerInput.value = "";
+      statusMsgEl.textContent = "";
+      statusMsgEl.className = "status";
+
+      hintPanel.classList.add("hidden");
+      hintToggleBtn.textContent = "💡 Show hint";
+
+      resultPanel.classList.add("hidden");
+
+      nextStopBtn.textContent =
+        index === stops.length - 1 ? "🏁 Go to final picnic screen" : "➜ Go to next puzzle";
+
+      answerInput.focus();
+    }
+
+    function unlockStop(index, forcedReveal = false) {
+      if (hasUnlockedThisStop) return;
+      hasUnlockedThisStop = true;
+
+      const stop = stops[index];
+      answerExplanationEl.innerHTML = stop.answerExplanation;
+      historyTextEl.innerHTML = stop.historyHtml;
+      directionsTextEl.innerHTML = stop.directionsHtml;
+      picnicTextEl.innerHTML = stop.picnicHtml;
+
+      resultPanel.classList.remove("hidden");
+
+      if (forcedReveal) {
+        statusMsgEl.textContent =
+          "Answer revealed. You can still follow the directions and continue the walk.";
+        statusMsgEl.className = "status";
+      } else {
+        statusMsgEl.textContent = "Correct! Stop details unlocked.";
+        statusMsgEl.className = "status ok";
+      }
+    }
+
+    startBtn.addEventListener("click", () => {
+      introScreen.classList.add("hidden");
+      gameScreen.classList.remove("hidden");
+      finalScreen.classList.add("hidden");
+      currentIndex = 0;
+      renderStop(currentIndex);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    checkAnswerBtn.addEventListener("click", () => {
+      const stop = stops[currentIndex];
+      const userAnswer = normaliseAnswer(answerInput.value);
+      if (!userAnswer) {
+        statusMsgEl.textContent = "Type something first – even a guess!";
+        statusMsgEl.className = "status err";
+        return;
+      }
+
+      const accepted = (stop.acceptedAnswers || []).some(a => {
+        return normaliseAnswer(a) === userAnswer;
       });
+
+      if (accepted) {
+        unlockStop(currentIndex, false);
+      } else {
+        statusMsgEl.textContent = "Not quite. Try again or use the hint.";
+        statusMsgEl.className = "status err";
+      }
+    });
+
+    hintToggleBtn.addEventListener("click", () => {
+      if (hintPanel.classList.contains("hidden")) {
+        hintPanel.classList.remove("hidden");
+        hintToggleBtn.textContent = "💡 Hide hint";
+      } else {
+        hintPanel.classList.add("hidden");
+        hintToggleBtn.textContent = "💡 Show hint";
+      }
+    });
+
+    giveUpBtn.addEventListener("click", () => {
+      unlockStop(currentIndex, true);
+    });
+
+    nextStopBtn.addEventListener("click", () => {
+      if (currentIndex < stops.length - 1) {
+        currentIndex += 1;
+        renderStop(currentIndex);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      } else {
+        // Finished last stop → show final picnic screen
+        gameScreen.classList.add("hidden");
+        finalScreen.classList.remove("hidden");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
     });
   </script>
 </body>
